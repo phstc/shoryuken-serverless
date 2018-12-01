@@ -13,10 +13,6 @@ class ShoryukenServerlessStack extends cdk.Stack {
       visibilityTimeoutSec: 300
     })
 
-    const topic = new sns.Topic(this, 'ShoryukenServerlessTopic')
-
-    topic.subscribeQueue(queue)
-
     const fn = new lambda.Function(this, 'MyFunction', {
       runtime: lambda.Runtime.NodeJS810,
       handler: 'index.handler',
