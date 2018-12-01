@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import sns = require('@aws-cdk/aws-sns')
 import sqs = require('@aws-cdk/aws-sqs')
 import cdk = require('@aws-cdk/cdk')
 import lambda = require('@aws-cdk/aws-lambda')
@@ -14,7 +13,7 @@ class ShoryukenServerlessStack extends cdk.Stack {
     })
 
     const fn = new lambda.Function(this, 'MyFunction', {
-      runtime: lambda.Runtime.NodeJS810,
+      runtime: new lambda.Runtime('ruby2.5'),
       handler: 'index.handler',
       code: lambda.Code.asset('./lambda-handler')
     })
