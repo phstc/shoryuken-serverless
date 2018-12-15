@@ -35,16 +35,14 @@ class TestWorker
 
   shoryuken_options queue: 'ShoryukenServerlessStack-ShoryukenServerlessQueue3F424389-1J4POJ8CG1G88'
 
-  def perform(sqs_msg, name)
+  def perform(_sqs_msg, name)
     puts "Hello, #{name}"
   end
 end
 
-def handler(event:, context:)
+def handler(event:, _context:)
   event['Records'].each do |record|
     sqs_msg = to_sqs_msg(record)
     Shoryuken::Processor.process(sqs_msg.queue, sqs_msg)
   end
-
-  puts JSON.generate(context.inspect)
 end
