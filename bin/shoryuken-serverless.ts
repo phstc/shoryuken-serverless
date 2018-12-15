@@ -14,8 +14,8 @@ class ShoryukenServerlessStack extends cdk.Stack {
 
     const fn = new lambda.Function(this, 'MyFunction', {
       runtime: new lambda.Runtime('ruby2.5'),
-      handler: 'index.handler',
-      code: lambda.Code.asset('./lambda-handler')
+      handler: 'lambda.handler',
+      code: lambda.Code.asset('./rails_sample_app')
     })
 
     fn.addEventSource(new SqsEventSource(queue))
