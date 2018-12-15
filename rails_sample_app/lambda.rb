@@ -1,6 +1,14 @@
+ENV['RAILS_ENV'] = 'production'
+ENV['QUEUE_NAME'] = 'ShoryukenServerlessStack-ShoryukenServerlessQueue3F424389-1J4POJ8CG1G88'
+
+# Load Rails
+require_relative 'config/environment'
+
 require 'json'
 require 'ostruct'
 require 'shoryuken'
+
+puts "Rails.env: #{Rails.env}"
 
 def to_sqs_msg(record)
   # sample record
@@ -30,14 +38,6 @@ def to_sqs_msg(record)
   )
 end
 
-# Load Rails
-ENV['QUEUE_NAME'] = 'ShoryukenServerlessStack-ShoryukenServerlessQueue3F424389-1J4POJ8CG1G88'
-ENV['RAILS_ENV'] = 'production'
-
-require_relative 'config/environment'
-
-puts "Rails.env: #{Rails.env}"
-
 class TestStandardWorker
   include Shoryuken::Worker
 
@@ -50,7 +50,7 @@ class TestStandardWorker
   end
 end
 
-def handler(event:, _context:)
+def handler(event:, context:)
   event['Records'].each do |record|
     sqs_msg = to_sqs_msg(record)
     Shoryuken::Processor.process(sqs_msg.queue, sqs_msg)
