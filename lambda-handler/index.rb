@@ -40,7 +40,7 @@ class TestWorker
   end
 end
 
-def handler(event:, _context:)
+def handler(event:, context:)
   event['Records'].each do |record|
     sqs_msg = to_sqs_msg(record)
     Shoryuken::Processor.process(sqs_msg.queue, sqs_msg)
