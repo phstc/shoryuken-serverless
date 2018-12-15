@@ -15,7 +15,8 @@ class ShoryukenServerlessStack extends cdk.Stack {
     const fn = new lambda.Function(this, 'MyFunction', {
       runtime: new lambda.Runtime('ruby2.5'),
       handler: 'lambda.handler',
-      code: lambda.Code.asset('./rails_sample_app')
+      code: lambda.Code.asset('./rails_sample_app'),
+      timeout: 60
     })
 
     queue.grantSendMessages(fn.role)
