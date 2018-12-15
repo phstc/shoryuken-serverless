@@ -18,6 +18,8 @@ class ShoryukenServerlessStack extends cdk.Stack {
       code: lambda.Code.asset('./rails_sample_app')
     })
 
+    queue.grantSendMessages(fn.role)
+
     fn.addEventSource(new SqsEventSource(queue))
   }
 }
