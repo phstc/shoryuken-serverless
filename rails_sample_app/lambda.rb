@@ -8,7 +8,18 @@ require 'json'
 require 'ostruct'
 require 'shoryuken'
 
-puts "Rails.env: #{Rails.env}"
+# quick monkey-patch for turning auto_delete off
+module ActiveJob
+  module QueueAdapters
+    class ShoryukenAdapter
+      class JobWrapper
+        include Shoryuken::Worker
+        # delete is auto on when SQS => Lambda
+        shoryuken_options body_parser: :json, auto_delete: false
+      end
+    end
+  end
+end
 
 def to_sqs_msg(record)
   # sample record
@@ -28,7 +39,7 @@ def to_sqs_msg(record)
   # "awsRegion": "us-east-1"
   #
   # create a Shoryuken compatible message
-  # so that this https://github.com/phstc/shoryuken/blob/master/lib/shoryuken/default_worker_registry.rb#L15
+  # so that https://github.com/phstc/shoryuken/blob/master/lib/shoryuken/default_worker_registry.rb#L15
   # and this https://github.com/phstc/shoryuken/blob/352b20642b4b8a123b821228231ed5a5c618a9cc/lib/shoryuken/body_parser.rb
   # work
   OpenStruct.new(
@@ -46,7 +57,8 @@ class TestStandardWorker
   def perform(_sqs_msg, name)
     puts "Hello from Standard Worker, #{name}"
     # say hi to Active Job
-    TestActiveJobJob.perform_later(name)
+    # see app/jobs/test_active_job.rb
+    TestActiveJob.perform_later(name: name)
   end
 end
 
