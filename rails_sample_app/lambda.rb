@@ -14,7 +14,7 @@ module ActiveJob
     class ShoryukenAdapter
       class JobWrapper
         include Shoryuken::Worker
-        # delete is auto on when SQS => Lambda
+        # SQS => Lambda auto deletes messages, Shoryuken does not have to
         shoryuken_options body_parser: :json, auto_delete: false
       end
     end
