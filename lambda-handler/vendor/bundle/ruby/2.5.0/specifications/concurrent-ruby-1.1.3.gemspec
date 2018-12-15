@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
   s.homepage = "http://www.concurrent-ruby.com".freeze
   s.licenses = ["MIT".freeze]
   s.required_ruby_version = Gem::Requirement.new(">= 1.9.3".freeze)
-  s.rubygems_version = "2.5.2".freeze
+  s.rubygems_version = "2.7.3".freeze
   s.summary = "Modern concurrency tools for Ruby. Inspired by Erlang, Clojure, Scala, Haskell, F#, C#, Java, and classic concurrency patterns.".freeze
 
-  s.installed_by_version = "2.5.2" if s.respond_to? :installed_by_version
+  s.installed_by_version = "2.7.3" if s.respond_to? :installed_by_version
 end

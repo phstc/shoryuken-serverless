@@ -15,10 +15,10 @@ Gem::Specification.new do |s|
   s.files = ["bin/shoryuken".freeze]
   s.homepage = "https://github.com/phstc/shoryuken".freeze
   s.licenses = ["LGPL-3.0".freeze]
-  s.rubygems_version = "2.5.2".freeze
+  s.rubygems_version = "2.7.3".freeze
   s.summary = "Shoryuken is a super efficient AWS SQS thread based message processor".freeze
 
-  s.installed_by_version = "2.5.2" if s.respond_to? :installed_by_version
+  s.installed_by_version = "2.7.3" if s.respond_to? :installed_by_version
 
   if s.respond_to? :specification_version then
     s.specification_version = 4

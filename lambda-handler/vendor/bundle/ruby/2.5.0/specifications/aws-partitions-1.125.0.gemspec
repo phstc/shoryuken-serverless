@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   s.description = "Provides interfaces to enumerate AWS partitions, regions, and services.".freeze
   s.homepage = "http://github.com/aws/aws-sdk-ruby".freeze
   s.licenses = ["Apache-2.0".freeze]
-  s.rubygems_version = "2.5.2".freeze
+  s.rubygems_version = "2.7.3".freeze
   s.summary = "Provides information about AWS partitions, regions, and services.".freeze
 
-  s.installed_by_version = "2.5.2" if s.respond_to? :installed_by_version
+  s.installed_by_version = "2.7.3" if s.respond_to? :installed_by_version
 end
