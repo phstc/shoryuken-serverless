@@ -7,8 +7,8 @@ The idea is to make Shoryuken Standard Workers and Active Job to work in a Lambd
 
 ```sh
 cd rails_sample_app
-docker run -v `pwd`:`pwd` -w `pwd` -i -t $CONTAINER_ID bundle install --deployment --without development test
-docker run -v `pwd`:`pwd` -w `pwd` -i -t $CONTAINER_ID gem pristine --all
+docker run -v `pwd`:`pwd` -w `pwd` -i -t lambci/lambda:build-ruby2.5 bundle install --deployment --without development test
+docker run -v `pwd`:`pwd` -w `pwd` -i -t lambci/lambda:build-ruby2.5 gem pristine --all
 cd ..
 # npm run build
 cdk deploy
