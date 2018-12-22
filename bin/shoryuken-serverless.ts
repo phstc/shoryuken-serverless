@@ -8,7 +8,11 @@ class ShoryukenServerlessStack extends cdk.Stack {
   constructor(parent: cdk.App, name: string, props?: cdk.StackProps) {
     super(parent, name, props)
 
-    const queue = new sqs.Queue(this, 'ShoryukenServerlessQueue', {
+    const queueStandardWorkers = new sqs.Queue(this, 'ShoryukenStandardQueue', {
+      visibilityTimeoutSec: 300
+    })
+
+    const queueActiveJob = new sqs.Queue(this, 'ShoryukenActiveJobQueue', {
       visibilityTimeoutSec: 300
     })
 
@@ -16,12 +20,18 @@ class ShoryukenServerlessStack extends cdk.Stack {
       runtime: new lambda.Runtime('ruby2.5'),
       handler: 'lambda.handler',
       code: lambda.Code.asset('./rails_sample_app'),
-      timeout: 60
+      timeout: 60,
+      environment: {
+        QUEUE_STANDARD: queueStandardWorkers.queueArn,
+        QUEUE_ACTIVEJOB: queueActiveJob.queueArn,
+        RAILS_ENV: 'production'
+      }
     })
 
-    queue.grantSendMessages(fn.role)
+    queueStandardWorkers.grantSendMessages(fn.role)
 
-    fn.addEventSource(new SqsEventSource(queue))
+    fn.addEventSource(new SqsEventSource(queueStandardWorkers))
+    fn.addEventSource(new SqsEventSource(queueActiveJob))
   }
 }
 

@@ -29,5 +29,8 @@ module MyApp
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.active_job.queue_adapter = :shoryuken
+
+    # Shoryuken standard workers
+    config.autoload_paths += %W(#{config.root}/workers)
   end
 end
