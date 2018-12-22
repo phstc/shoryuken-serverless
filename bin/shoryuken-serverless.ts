@@ -22,13 +22,13 @@ class ShoryukenServerlessStack extends cdk.Stack {
       code: lambda.Code.asset('./rails_sample_app'),
       timeout: 60,
       environment: {
-        QUEUE_STANDARD: queueStandardWorkers.queueArn,
-        QUEUE_ACTIVEJOB: queueActiveJob.queueArn,
+        QUEUE_STANDARD: queueStandardWorkers.queueName,
+        QUEUE_ACTIVEJOB: queueActiveJob.queueName,
         RAILS_ENV: 'production'
       }
     })
 
-    queueStandardWorkers.grantSendMessages(fn.role)
+    queueActiveJob.grantSendMessages(fn.role)
 
     fn.addEventSource(new SqsEventSource(queueStandardWorkers))
     fn.addEventSource(new SqsEventSource(queueActiveJob))

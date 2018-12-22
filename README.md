@@ -1,37 +1,12 @@
 # Shoryuken Serverless
 
-This is a PoC for making existing [Shoryuken](https://github.com/phstc/shoryuken) projects (Active Job or Standard workers) to work with Lambda Ruby using SQS as an event source.
+This is a PoC for making existing [Shoryuken](https://github.com/phstc/shoryuken) (Active Job or Standard workers) to work with Lambda Ruby using SQS as an event source.
 
 The code below is pretty much what you need in your Lambda for make it work with Shoryuken Standard workers or Active Job.
 
 ### Shoryuken Lambda
 
-```ruby
-# https://github.com/phstc/shoryuken-serverless/blob/master/rails_sample_app/lambda.rb
-
-# Load Rails
-puts "Loading Rails..."
-require_relative 'config/environment'
-
-def to_sqs_msg(record)
-  Aws::SQS::Types::Message.new(
-    body: record['body'],
-    md5_of_body: record['md5OfBody'],
-    message_attributes: record['messageAttributes'],
-    message_id: record['messageId'],
-    receipt_handle: record['receiptHandle']
-  )
-end
-
-def handler(event:, context:)
-  event['Records'].each.with_index do |record|
-    sqs_msg = to_sqs_msg(record)
-    puts "record====>"
-    puts record
-    Shoryuken::Processor.process(sqs_msg.queue, sqs_msg)
-  end
-end
-```
+See https://github.com/phstc/shoryuken-serverless/blob/master/rails_sample_app/lambda.rb
 
 It is important to load Rails outside the method `handler`, so that it gets "cached" while your Lambda (container) is still hot.
 
@@ -50,7 +25,6 @@ docker run -v `pwd`:`pwd` -w `pwd` -i -t lambci/lambda:build-ruby2.5 bundle inst
 docker run -v `pwd`:`pwd` -w `pwd` -i -t lambci/lambda:build-ruby2.5 gem pristine --all
 ```
 #### Deploy with aws-cdk
-
 
 ```sh
 (
