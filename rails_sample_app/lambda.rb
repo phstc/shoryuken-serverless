@@ -36,14 +36,6 @@ class Shoryuken::LambdaMessageParser
   end
 end
 
-Shoryuken.configure_server do |config|
-  config.server_middleware do |chain|
-    # When your function successfully processes a batch, Lambda deletes its messages from the queue.
-    # https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html
-    chain.remove Shoryuken::Middleware::Server::AutoDelete
-  end
-end
-
 def handler(event:, context:)
   event['Records'].each do |record|
     parser = Shoryuken::LambdaMessageParser.new(record)
