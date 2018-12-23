@@ -30,8 +30,10 @@ class ShoryukenServerlessStack extends cdk.Stack {
 
     queueActiveJob.grantSendMessages(fn.role)
 
-    fn.addEventSource(new SqsEventSource(queueStandardWorkers))
-    fn.addEventSource(new SqsEventSource(queueActiveJob))
+    // batchSize defaults to 10, if you use > 1, your Lambda needs to be able to process in parallel,
+    // otherwise, if your messages take 1 minute to be processed, the last one will take up to 10 minutes to start being processed
+    fn.addEventSource(new SqsEventSource(queueStandardWorkers, { batchSize: 1 }))
+    fn.addEventSource(new SqsEventSource(queueActiveJob, { batchSize: 1 }))
   }
 }
 
