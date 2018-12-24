@@ -36,11 +36,17 @@ class Shoryuken::LambdaMessageParser
   end
 end
 
+def worker_exists?(queue, sqs_msg)
+  !Shoryuken.worker_registry.fetch_worker(queue, sqs_msg).nil?
+end
+
 def handler(event:, context:)
   event['Records'].each do |record|
     parser = Shoryuken::LambdaMessageParser.new(record)
-    unless Shoryuken::Processor.process(parser.queue, parser.sqs_msg)
-      raise "Could not process #{parser.sqs_msg.message_id}"
-    end
+    # Shoryuken::Processor does not raise errors if a worker is not found
+    # when a worker is not found, the message can't be processed
+    # and we want to make sure to raise an error, otherwise the message will be auto deleted
+    raise "No worker found for #{parser.queue}" unless worker_exists?(parser.queue, parser.sqs_msg)
+    Shoryuken::Processor.process(parser.queue, parser.sqs_msg)
   end
 end
